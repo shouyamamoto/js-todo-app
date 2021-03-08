@@ -1,3 +1,8 @@
+// 未完了のTODOと完了したTODOを取得
+const incompleteTodos = document.getElementById('incomplete-todos')
+const completeTodos = document.getElementById('complete-todos')
+
+// 関数宣言
 const onClickAdd = () => {
   const inputText = document.getElementById('add-text').value
   const todoFrag = document.createDocumentFragment()
@@ -20,6 +25,7 @@ const createTodo = (inputText, todoFrag) => {
   li.textContent = inputText
   completeBtn.classList.add('complete-button')
   deleteBtn.classList.add('delete-button')
+  completeBtn.addEventListener('click', () => (onClickComplete(completeBtn)))
   deleteBtn.addEventListener('click', () => {onClickDelete(deleteBtn)})
   div.appendChild(li)
   div.appendChild(completeBtn)
@@ -29,11 +35,30 @@ const createTodo = (inputText, todoFrag) => {
 const onClickDelete = (deleteBtn) => {
   deleteBtn.parentNode.remove()
 }
+const onClickComplete = (completeBtn) => {
+  completeBtn.parentNode.remove()
+  const completeTodo = completeBtn.previousElementSibling
+  const div = document.createElement('div')
+  const backBtn = document.createElement('button')
+  div.classList.add('list-row')
+  backBtn.classList.add('back-btn') 
+  backBtn.textContent = '戻す'
+  div.appendChild(completeTodo)
+  div.appendChild(backBtn)
+  completeTodos.appendChild(div)
+}
 
+// 追加ボタンを押すと、onClickAdd関数を実行する
 document.getElementById('add-button').addEventListener('click', () =>  onClickAdd() )
-const incompleteTodos = document.getElementById('incomplete-todos')
 
+// 初期で設定している未完了のTODOを削除するための処理
 const deleteBtns = document.querySelectorAll('.delete-button')
 deleteBtns.forEach((deleteBtn) => {
   deleteBtn.addEventListener('click', () => onClickDelete(deleteBtn))
+})
+
+// 初期で設定している未完了のTODOを完了したTODOに追加する処理
+const completeBtns = document.querySelectorAll('.complete-button')
+completeBtns.forEach((completeBtn) => {
+  completeBtn.addEventListener('click', () => onClickComplete(completeBtn))
 })
